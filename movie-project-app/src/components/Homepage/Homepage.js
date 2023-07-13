@@ -9,12 +9,23 @@ import CardComponent from './CardComponent';
 
 
 
+
 function Homepage() {
 
 
   const [movieItems, setMovieItems] = useState([]);
   const IMG_URL = 'https://image.tmdb.org/t/p/w300';
 
+
+  useEffect(() => {
+    const API_URL = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=d62b9f08c7e24702fe7b7bedf129c3e4`
+
+
+=======
+function Homepage() {
+
+  const [movieItems, setMovieItems] = useState([]);
+  const IMG_URL = 'https://image.tmdb.org/t/p/w300';
 
   useEffect(() => {
     const API_URL = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=d62b9f08c7e24702fe7b7bedf129c3e4`
@@ -34,11 +45,16 @@ function Homepage() {
     };
 
 
+
     fetchMovies();
   }, []);
 
 
      
+
+    fetchMovies();
+  }, []);
+
 
 
   return (
@@ -60,7 +76,7 @@ function Homepage() {
             ))}
           </div>  
         </div>
-   
+
     </>
    
   );
