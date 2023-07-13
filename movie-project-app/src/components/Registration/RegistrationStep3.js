@@ -18,7 +18,9 @@ function RegistrationStep3() {
                     <Button variant="light" size="lg" className="mb-4" onClick={() => handleGalleryStyle('Upcoming')}>Upcoming</Button>
                     <div>
                         <button type="submit" className="btn btn-primary">Submit</button>
-                        <button type="submit" className="btn btn-primary" onClick={moveNext}>Skip</button>
+                        <button type="submit" className="btn btn-primary" 
+                            //onClick={moveNext}
+                            >Skip</button>
                     </div>
                 </main>
             </div>
