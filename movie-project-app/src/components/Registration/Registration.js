@@ -14,12 +14,12 @@ function Registration() {
         <main className="my-5">
             <form>
                 <div className="form-group">
-                    <label htmlFor="emailInput">Username</label>
+                    <label htmlFor="userInput">Username</label>
                     <div className="input-group">
                         <div className="input-group-prepend">
                             <span className="input-group-text"><FaUserAlt /></span>
                         </div>
-                        <input type="email" className="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter Username"/>
+                        <input type="login" className="form-control" id="userInput" placeholder="Enter Username"/>
                     </div>
                 </div>
                 <div className="form-group">
