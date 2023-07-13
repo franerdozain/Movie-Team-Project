@@ -11,6 +11,7 @@ import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import RegistrationStep2 from './components/Registration/RegistrationStep2';
 import RegistrationStep3 from './components/Registration/RegistrationStep3';
+import RegistrationStep4 from './components/Registration/RegistrationStep4';
 
 
 

@@ -5,7 +5,7 @@ function RegistrationStep2() {
     const [language, setLanguage] = useState('');
 
     useEffect(() => {
-        fetch(api)
+        //fetch(api)
     }, []);
 
     const handleGenreSelection = (genre) => {
@@ -28,15 +28,30 @@ function RegistrationStep2() {
                 <div className="form-group">
                     <label htmlFor="genreSelection">Please select your favorite movie genres:</label>
                     <div id="genreSelection">
-                        <button type="button" className="btn btn-primary m-2" key={genre.id} onClick={handleGenreSelection}>
-                        {Romance}
-                        {Crime}
-                        {Comdey}
-                        </button>
+                        <button 
+                            type="button" 
+                            className="btn btn-primary m-2" 
+                            //key={genre.id} 
+                            //onClick={handleGenreSelection}
+                        >Romance</button>
+                        <button 
+                            type="button" 
+                            className="btn btn-primary m-2" 
+                            //key={genre.id} 
+                            //onClick={handleGenreSelection}
+                        >Crime</button>
+                         <button 
+                            type="button" 
+                            className="btn btn-primary m-2" 
+                            //key={genre.id} 
+                            //onClick={handleGenreSelection}
+                        >Comdey</button>
                     </div>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="submit" className="btn btn-primary" onClick={moveNext}>Skip</button>
+                <button type="submit" className="btn btn-primary" 
+                    //</form>onClick={moveNext}
+                    >Skip</button>
             </form>
           </main>
           <footer className="footer text-center my-5">

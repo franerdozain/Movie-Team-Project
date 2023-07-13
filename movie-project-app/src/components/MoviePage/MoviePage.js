@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMovieDetails, getMovieImages } from "../api";
+//import { getMovieDetails, getMovieImages } from "../api";
 import { IoPlay, IoVolumeHigh } from "react-icons/io5";
 
 function MoviePage() {
