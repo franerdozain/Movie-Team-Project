@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Homepage from './components/Homepage/Homepage';
 //import MoviePage from './components/MoviePage/MoviePage';
 import Profile from './components/Profile/Profile';
+import Registration from './components/Registration/Registration';
 
 
 function App() {
@@ -23,6 +24,10 @@ function App() {
 
 
           <Route path="/Profile" element={<Profile 
+          
+          />} />
+
+          <Route path="/Registration" element={<Registration 
           
           />} />
           
