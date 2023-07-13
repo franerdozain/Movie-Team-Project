@@ -4,6 +4,7 @@ import Homepage from './components/Homepage/Homepage';
 //import MoviePage from './components/MoviePage/MoviePage';
 import Profile from './components/Profile/Profile';
 import Registration from './components/Registration/Registration';
+import RegistrationStep2 from './components/Registration/RegistrationStep2';
 
 
 function App() {
@@ -28,6 +29,10 @@ function App() {
           />} />
 
           <Route path="/Registration" element={<Registration 
+          
+          />} />
+
+          <Route path="/RegistrationStep2" element={<RegistrationStep2 
           
           />} />
           
