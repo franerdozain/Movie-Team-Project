@@ -1,6 +1,8 @@
 import React from 'react';
 
 
+
+
 function CardComponent(props) {
  
   return (
@@ -12,5 +14,6 @@ function CardComponent(props) {
     </div>
   );
 }
+
 
 export default CardComponent;
