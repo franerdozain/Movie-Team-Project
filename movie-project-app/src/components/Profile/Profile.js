@@ -1,3 +1,4 @@
+
 import { FaGlobe, FaRegImages, FaTheaterMasks, FaVolumeUp, FaRegEdit } from 'react-icons/fa';
 
 export default function Profile() {
@@ -23,18 +24,36 @@ export default function Profile() {
           <div className="col-md-12">
             <div className="form-group text-center">
               <label for="selectedLanguage" className="form-label">Favorite Language</label>
+
+import { FaGlobe, FaRegImages, FaTheaterMasks, FaVolumeUp } from 'react-icons/fa';
+
+export default function Profile() {
+
+  return (
+    <div>   
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="selectedLanguage" class="form-label">Favorite Language</label>
+
               <div className="input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text"><FaGlobe /></span>
                 </div>
+
                 <input type="text" className="form-control" id="selectedLanguage" placeholder="selected lang / - " />
                 <div className="input-group-append">
                   <span className="input-group-text"><FaRegEdit /></span>
                 </div>
+
+                <input type="text" class="form-control" id="selectedLanguage" placeholder="selected lang / - " />
+
               </div>
             </div>
           </div>
         </div>
+
 
         <div className="row">
           <div className="col-md-12">
@@ -106,6 +125,53 @@ export default function Profile() {
           </button>
         </div>
       </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="selectedGenre" class="form-label">Favorite Genre</label>
+        <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text"><FaTheaterMasks /></span>
+                </div>
+        <input type="text" class="form-control" id="selectedGenre" placeholder="selected genre / - " />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="selectedGallery" class="form-label">Gallery To Show On Home Page</label>
+        <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text"><FaRegImages /></span>
+                </div>
+        <input type="text" class="form-control" id="selectedGallery" placeholder="selected gallery / - " />
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="selectedVoice" class="form-label">Voice To Hearing Text</label>
+        <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text"><FaVolumeUp /></span>
+                </div>
+        <input type="text" class="form-control" id="selectedVoice" placeholder="selected voice / - " />
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+
+
     </div>
   );
 }
