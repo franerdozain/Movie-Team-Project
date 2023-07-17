@@ -1,6 +1,28 @@
 import React, { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-import { FaLock,FaUser,} from 'react-icons/fa';
+import { FaLock, FaUser } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+
+const users = [
+  {
+    username: 'Bart',
+    password: 'Pass1',
+    language: 'en-US',
+    favoriteGenre: '18',
+    mainGallery: 'popular',
+    voice: 'Spanish Female',
+    history: ['Pulp Fiction','Mario Bros','Coco','The Notebook']
+  },
+  {
+    username: 'Colby',
+    password: 'Pass2',
+    language: 'en-US',
+    favoriteGenre: '18',
+    mainGallery: 'popular',
+    voice: 'Spanish Female',
+    history: ['Hunger Games','Fast X']
+  }
+];
 
 const formFields = [
   {
@@ -10,8 +32,6 @@ const formFields = [
     name: 'username',
     defaultValue: '',
     placeholder: 'Enter Username',
-   
-    message: 'We do not have an account associated with that username'
   },
   {
     label: 'Password',
@@ -20,26 +40,26 @@ const formFields = [
     name: 'password',
     defaultValue: '',
     placeholder: 'Enter Password',
-    
-    message: 'incorrect password'
   }
 ];
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const message = "We couldn't log you in. Please check your email and password and try again.";
 
 function Login() {
   const [info, setInfo] = useState({
     username: '',
     password: ''
   });
+  const [invalidLogin, setInvalidLogin] = useState(false);
+  const navigate = useNavigate();
 
- 
-
-  const FormInput = ({ label, icon, type, name, defaultValue, placeholder, onInputChange, message, invalid }) => {
+  const FormInput = ({label,icon,type,name,defaultValue,placeholder,onInputChange,invalid}) => {
     const handleBlur = (event) => {
       const { name, value } = event.target;
       onInputChange(name, value);
     };
+  
+
     return (
       <Form.Group controlId={`form${name}`}>
         <Form.Label>{label}</Form.Label>
@@ -57,64 +77,60 @@ function Login() {
       </Form.Group>
     );
   };
-  
+
   const onInputChange = (name, value) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
       [name]: value
     }));
-    
   };
 
+  const handleLogin = () => {
+    const userExists = users.some(
+      (user) => user.username === info.username && user.password === info.password
+    );
+
+    if (userExists) {
+      navigate('/Profile');
+    } else {
+      setInvalidLogin(true);
+    }
+  };
 
   console.log(info);
-
 
   return (
     <>
       <div className="text-center">
         <h1>Log In</h1>
-        
-        <hr/>
+        <hr />
       </div>
       <div className="container">
         {formFields.map((field) => (
           <FormInput
-            label={field.label}
-            icon={field.icon}
-            type={field.type}
-            name={field.name}
-            placeholder={field.placeholder}
-            defaultValue={info[field.name]}
-            onInputChange={onInputChange}
-           
-            message={field.message}
-            
-          />
+          label={field.label}
+          icon={field.icon}
+          type={field.type}
+          name={field.name}
+          placeholder={field.placeholder}
+          defaultValue={info[field.name]}
+          onInputChange={onInputChange}
+          invalid={field.name === 'password' && invalidLogin} 
+        />
         ))}
 
-         <div className='my-2'>
-          <Button>Log In</Button>
-         </div>
-        
-        <div>
-          <div className='mb-2'>
-          don't have an account yet?
-          </div>
-          
-          
-          <Button>Make a new account</Button>
+        <div className="my-2">
+          <Button onClick={handleLogin}>Log In</Button>
         </div>
-        
+        <div>
+          <div className="mb-2">Don't have an account yet?</div>
+          <Link to="/Registration">
+                make a new account
+          </Link>
+        </div>
       </div>
     </>
   );
 }
 
-
-
 export default Login;
-
-
-
-
