@@ -1,5 +1,8 @@
 import Homepage from "./components/Homepage/Homepage";
 
+const API_KEY = `api_key=d62b9f08c7e24702fe7b7bedf129c3e4`;
+const BASE_URL = `https://api.themoviedb.org/3`;
+
 export async function getMovieDetails(id) {
     const response = await fetch(
         `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
@@ -11,7 +14,7 @@ export async function getMovieDetails(id) {
   
     const data = await response.json();
     return data;
-}
+};
 
 export async function getMovieImages(id) {
     const response = await fetch(
@@ -24,4 +27,4 @@ export async function getMovieImages(id) {
   
     const data = await response.json();
     return data.backdrops.map((backdrop) => backdrop.file_path);
-  }
+};
