@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FaLock, FaUser } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 const users = [
   {
@@ -86,11 +86,12 @@ function Login() {
   };
 
   const handleLogin = () => {
-    const userExists = users.some(
+    const userExists = users.find(
       (user) => user.username === info.username && user.password === info.password
     );
-
+  
     if (userExists) {
+      localStorage.setItem('user', JSON.stringify(userExists));
       navigate('/Profile');
     } else {
       setInvalidLogin(true);
