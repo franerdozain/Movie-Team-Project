@@ -421,9 +421,6 @@ const items = data.results
 export default function Search() {
   const navigate = useNavigate();
   const location = useLocation();
-  
-
-
 
   return (
     <>
@@ -434,7 +431,7 @@ export default function Search() {
       </form>
       <div className="container text-center">
         <Row >
-          <Col md={2}>
+          <Col md={2} className="d-flex flex-column">
             <GenresMenu />
           </Col>
           <Col md={10}>
@@ -446,8 +443,6 @@ export default function Search() {
           </Col>
         </Row>
       </div>
-
     </>
-
   );
 }
