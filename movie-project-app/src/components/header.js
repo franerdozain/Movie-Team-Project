@@ -6,7 +6,7 @@ import { Dropdown } from 'react-bootstrap';
 
 export default function Navbar({ login }) {
     return (
-        <nav className="w-100 d-flex align-items-center justify-content-between sticky-top sticky-bar bg-body-tertiary h-10 bg-dark ">
+        <nav className="w-100 d-flex align-items-center justify-content-between sticky-top sticky-bar bg-body-tertiary h-10 bg-dark mb-2">
             <div className="d-flex nav-div justify-content-center h-25">
                 <Link to="/">
                     <img src={homeLogo} className="homeLogo" height={70} alt="Home" />
