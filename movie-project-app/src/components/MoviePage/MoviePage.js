@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-//import { getMovieDetails, getMovieImages } from "../api";
+import { getMovieDetails, getMovieImages } from "../api";
 import { IoPlay, IoVolumeHigh } from "react-icons/io5";
 
 function MoviePage() {
@@ -9,8 +9,13 @@ function MoviePage() {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
-        getMovieDetails(id).then(movie => setMovie(movie));
-        getMovieImages(id).then(images => setImages(images));
+        getMovieDetails(id)
+            .then(movie => setMovie(movie))
+            .catch((error) => console.error("Failed to fetch movie details", error));
+
+        getMovieImages(id)
+            .then(images => setImages(images))
+            .catch((error) => console.error("Failed to fetch movie images", error));
     }, [id]);
 
     if (!movie || !images) return <div>Loading...</div>;
