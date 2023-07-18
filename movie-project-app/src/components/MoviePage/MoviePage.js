@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getMovieDetails, getMovieImages, getMovieCredits, getMovieReviews } from "../../api";
 import { IoPlay, IoVolumeHigh } from "react-icons/io5";
+import { getUserFromLocalStorage } from '../../localStorageManager';
+
 
 function MoviePage() {
   const { id } = useParams();
@@ -11,33 +13,47 @@ function MoviePage() {
   const [actors, setActors] = useState([]);
   const [reviews, setReviews] = useState([]);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   useEffect(() => {
-    getMovieDetails(id)
-      .then((movie) => setMovie(movie))
-      .catch((error) => console.error("Failed to fetch movie details", error));
+    Promise.all([
+      getMovieDetails(id),
+      getMovieImages(id),
+      getMovieCredits(id),
+      getMovieReviews(id),
+    ]).then(([movie, images, credits, reviews]) => {
+      setMovie(movie);
+      setImages(images);
 
-    getMovieImages(id)
-      .then((images) => setImages(images))
-      .catch((error) => console.error("Failed to fetch movie images", error));
+      const director = credits.crew.find(crew => crew.job === "Director")?.name;
+      setDirector(director);
+      const actors = credits.cast.slice(0, 6).map(actor => actor.name);
+      setActors(actors);
 
-    getMovieCredits(id)
-      .then((credits) => {
-        const director = credits.crew.find(crew => crew.job === "Director")?.name;
-        setDirector(director);
-        const actors = credits.cast.slice(0, 6).map(actor => actor.name);
-        setActors(actors);
-      })
-      .catch((error) => console.error("Failed to fetch movie credits", error));
-      
-    getMovieReviews(id)
-      .then((reviews) => setReviews(reviews))
-      .catch((error) => console.error("Failed to fetch movie reviews", error));
-    }, [id]);
+      setReviews(reviews);
+    }).catch((error) => {
+      console.error("Failed to fetch movie data", error);
+    });
+  }, [id]);
+  
+  if (!movie || !images) return <div>Loading...</div>;
 
-    if (!movie || !images) return <div>Loading...</div>;
+  const handleVoiceover = (text) => {
+    if (typeof window.responsiveVoice === 'undefined') {
+        console.error("ResponsiveVoice is not loaded yet.");
+        return;
+    }
+    if (isPlaying) {
+        window.responsiveVoice.cancel();
+        setIsPlaying(false);
+    } else {
+        const voiceStyle = getUserFromLocalStorage().voiceStyle || 'US English Female';
+        window.responsiveVoice.speak(text, voiceStyle, { onstart: () => setIsPlaying(true), onend: () => setIsPlaying(false) });
+    }
+};
 
     return (
-        <div>
+        <div className="container mt-3 mb-3">
             <h2>{movie.title}</h2>
             <div className="row">
                 <div className="col-3">
@@ -50,7 +66,7 @@ function MoviePage() {
                         <div className="card-body">
                             <h5 className="card-title">{movie.title}</h5>
                             <div>
-                                <IoPlay />
+                                <IoPlay onClick={() => handleVoiceover(movie.overview)} />
                                 <IoVolumeHigh />
                             </div>
                         </div>
@@ -61,11 +77,11 @@ function MoviePage() {
                         <div className="card-body">
                             <h5 className="card-title">{movie.title} ({new Date(movie.release_date).getFullYear()})</h5>
                             <p className="card-text">{movie.genres ? movie.genres.map(genre => genre.name).join(', ') : 'No Genres'}</p>
-                            <p className="card-text">{movie.runtime} minutes</p>
-                            <p className="card-text">{director}</p>
-                            <p className="card-text">{actors.join(', ')}</p>
+                            <p className="card-text">Movie duration: {movie.runtime} minutes</p>
+                            <p className="card-text">Director: {director}</p>
+                            <p className="card-text">Main cast: {actors.join(', ')}</p>
                             <div>
-                                <IoPlay />
+                                <IoPlay onClick={() => handleVoiceover(movie.overview)} />
                                 <IoVolumeHigh />
                             </div>
                         </div>
@@ -80,7 +96,7 @@ function MoviePage() {
                                     <p className="card-text">{reviews[0]?.content}</p>
                                     <button className="btn btn-primary">Show All</button>
                                     <div>
-                                        <IoPlay />
+                                        <IoPlay onClick={() => handleVoiceover(movie.overview)} />
                                         <IoVolumeHigh />
                                     </div>
                                 </div>
