@@ -1,7 +1,34 @@
 
 
-const API_KEY = `d62b9f08c7e24702fe7b7bedf129c3e4`;
-const BASE_URL = `https://api.themoviedb.org/3`;
+
+const API_KEY = 'api_key=d62b9f08c7e24702fe7b7bedf129c3e4';
+const BASE_URL = 'https://api.themoviedb.org/3';
+
+export const fetchMovies = async (url) => {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error('Error fetching movies:', error);
+    return [];
+  }
+};
+
+export const fetchUpcomingMovies = async (language) => {
+  const upcoming_movie_API_URL = `${BASE_URL}/movie/upcoming?language=${language}&page=1&${API_KEY}`;
+  return fetchMovies(upcoming_movie_API_URL);
+};
+
+export const fetchMainGalleryMovies = async (mainGallery, language) => {
+  const main_gallery_API_URL = `${BASE_URL}/movie/${mainGallery}?language=${language}&page=1&${API_KEY}`;
+  return fetchMovies(main_gallery_API_URL);
+};
+
+export const fetchFavoriteGenreMovies = async (favoriteGenre, language) => {
+  const favorite_genre_API_URL = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=${language}&page=1&sort_by=popularity.desc&with_genres=${favoriteGenre}&${API_KEY}`;
+  return fetchMovies(favorite_genre_API_URL);
+};
 
 
 export async function getMovieDetails(id) {
