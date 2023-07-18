@@ -1,15 +1,19 @@
-export default function Dropdown({setFilterDropdownTitle, filterDropdownTitle}) {
+export default function Dropdown({setSelectedFilter, setFilterDropdownTitle, filterDropdownTitle}) {
+
     const filters = [
         "Rating High to Low",
         "Rating Low to High",
         "Viewed Date New to Old",
         "Viewed Date Old to New"
     ]
-    //testing dropdown title
-    let filterDropdownTitle = ""
-    const handleClick = (event) => {
-        console.log(event);
-        setFilterDropdownTitle(event)
+    
+    const handleClick = (selectedSortBy) => {
+        if(selectedSortBy === "Clear"){
+            setFilterDropdownTitle(null)
+        } else {
+            setFilterDropdownTitle(selectedSortBy);
+            setSelectedFilter(selectedSortBy);
+        }
     }
 
     return (

@@ -3,7 +3,7 @@ import Dropdown from "./Dropdown";
 import GenresMenu from "./GenresMenu";
 import { Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { getGenres, getSelectedGenre } from "../../api";
+import { getGenres, getSelectedGenre, getSortByWithGenre } from "../../api";
 
 // api data for testing purposes
 const data = {
@@ -457,7 +457,33 @@ export default function Search() {
     fetchSelectedGenreMovies();
   }, [selectedGenre]);
 
- 
+  useEffect(() => {
+    const fetchTopRatedWithGenre = async () => {
+      if (selectedGenre && genres.length > 0) {
+        const filteredGenres = genres.filter((genre) => genre.name === selectedGenre);
+        if (filteredGenres.length > 0) {
+          const selectedGenreId = filteredGenres[0].id;
+          try {
+            const movies = await getSortByWithGenre(selectedGenreId, selectedFilter);
+            setMovies(movies);
+          } catch (error) {
+            console.error("Error fetching selected genre movies:", error);
+          }
+        }
+      } else {
+        try {
+          const movies = await getSortByWithGenre(null, selectedFilter); 
+          setMovies(movies);
+        } catch (error) {
+          console.error("Error fetching selected genre movies:", error);
+        }
+      } 
+    };
+    
+    fetchTopRatedWithGenre();
+  }, [selectedGenre, selectedFilter]);
+  
+  
 
   return (
     <>
