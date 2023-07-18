@@ -1,11 +1,13 @@
 import { FaSadCry } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchCard ({item}) {
     const regex = /[^\x00-\x7F]/;
+    const navigate = useNavigate();
 
     const handleClick = (item) => {
         const title = item.original_title || item.title;
-        navigate(`/title/${title}`);
+        navigate(`/search/${title}`);
       };
     return (
         <div className="col mb-2" key={item.id}>

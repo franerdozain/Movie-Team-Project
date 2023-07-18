@@ -1,23 +1,31 @@
-export default function Dropdown() {
+export default function Dropdown({setSelectedFilter, setFilterDropdownTitle, filterDropdownTitle}) {
+
     const filters = [
         "Rating High to Low",
         "Rating Low to High",
         "Viewed Date New to Old",
         "Viewed Date Old to New"
     ]
-    //testing dropdown title
-    let dropdownTitle = ""
+    
+    const handleClick = (selectedSortBy) => {
+        if(selectedSortBy === "Clear"){
+            setFilterDropdownTitle(null)
+        } else {
+            setFilterDropdownTitle(selectedSortBy);
+            setSelectedFilter(selectedSortBy);
+        }
+    }
 
     return (
         <>
             <button className="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false" >
-                {dropdownTitle || "Filters"}
+                {filterDropdownTitle || "Sort By"}
             </button>
             <ul className="dropdown-menu">
-                <li role="button" className="dropdown-item" onClick={(event) => handleCLick(event)}>Clear</li>
+                <li role="button" className="dropdown-item" onClick={(event) => handleClick(event.target.innerText)}>Clear</li>
                 {filters &&
                     filters.map((filter, index) => (
-                        <li key={index} role="button" className="dropdown-item" onClick={(event) => handleCLick(event)}>{filter}</li>
+                        <li key={index} role="button" className="dropdown-item" onClick={(event) => handleClick(event.target.innerText)}>{filter}</li>
                     )
                     )}
             </ul>

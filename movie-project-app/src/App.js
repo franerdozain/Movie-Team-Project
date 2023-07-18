@@ -49,6 +49,11 @@ function App() {
 
           />} />
 
+          
+          <Route path="/Search/:genre" element={<Search
+
+
+          />} />
 
           <Route path="/Login" element={<Login
 

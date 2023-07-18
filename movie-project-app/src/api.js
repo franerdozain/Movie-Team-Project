@@ -27,6 +27,42 @@ export async function getMovieImages(id) {
     return data.backdrops.map((backdrop) => backdrop.file_path);
 };
 
+
+export async function getGenres () {
+    const response = await fetch(
+        `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch movie genres");
+        }
+        const data = await response.json()
+    return data.genres;
+}
+
+export async function getSelectedGenre(genreId) {
+    const response = await fetch(
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch selected genre movies");
+        }
+        const data = await response.json()
+    return data.results;
+}
+
+export async function getSortByWithGenre(genreId, sortBy) {
+    console.log("APII", genreId, sortBy);
+    let apiUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&vote_count.gte=1000`;
+  
+    if (genreId === null) {
+      apiUrl += `&sort_by=${getSortByOption(sortBy)}`;
+    } else {
+      apiUrl += `&sort_by=${getSortByOption(sortBy)}&with_genres=${genreId}`;
+    }
+  
+    const response = await fetch(apiUrl);
+  
+    if (!response.ok) {
+      throw new Error("Failed to fetch selected movies");
+
 export async function getMovieCredits(id) {
     const response = await fetch(
       `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`
@@ -46,8 +82,26 @@ export async function getMovieReviews(id) {
   
     if (!response.ok) {
       throw new Error("Failed to fetch movie reviews");
+
     }
   
     const data = await response.json();
     return data.results;
+
+  }
+  
+  function getSortByOption(sortBy) {
+    const sortByOptions = {
+      "Rating High to Low": "vote_average.desc",
+      "Rating Low to High": "vote_average.asc",
+      "Viewed Date New to Old": "release_date.desc",
+      "Viewed Date Old to New": "release_date.asc",
+    };
+  
+    return sortByOptions[sortBy];
+  }
+  
+  
+
 };
+
