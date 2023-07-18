@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { getUserFromLocalStorage } from './localStorageManager';
 import Homepage from './components/Homepage/Homepage';
-// import MoviePage from './components/MoviePage/MoviePage';
+import MoviePage from './components/MoviePage/MoviePage';
 import Profile from './components/Profile/Profile';
-
 
 import Search from './components/Search/Search';
 import Navbar from './components/header';
@@ -18,11 +17,8 @@ import Login from './components/Login/Login';
 
 
 
-
-
 function App() {
   const [user, setUser] = useState(null);
-
 
   useEffect(() => {
     const userFromLocalStorage = getUserFromLocalStorage();
@@ -32,7 +28,6 @@ function App() {
   }, []);
 
 
- 
     return (
       <div>
         <Navbar login={user} />
@@ -44,29 +39,24 @@ function App() {
 
 
 
-
           <Route path="/Profile" element={<Profile
-
 
           />} />
 
 
 
-
           <Route path="/Search" element={<Search
-
 
           />} />
 
 
           <Route path="/Login" element={<Login
 
-
           />} />
-
-
+          
+          <Route path="/movie/:id" element={<MoviePage />} />
 {/*
-           <Route path="/MoviePage" element={<MoviePage
+           
 
 
           <Route path="/Registration" element={<Registration
