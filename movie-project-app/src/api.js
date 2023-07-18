@@ -2,10 +2,7 @@
 
 const API_KEY = `d62b9f08c7e24702fe7b7bedf129c3e4`;
 const BASE_URL = `https://api.themoviedb.org/3`;
-const IMG_URL = 'https://image.tmdb.org/t/p/w200';
-const upcoming_movie_API_URL = `${BASE_URL}/movie/upcoming?language=en-US&page=1&${API_KEY}`;
-const main_gallery_API_URL = `${BASE_URL}/movie/popular?language=en-US&page=1&${API_KEY}`;
-const favorite_genre_API_URL = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${favoriteGenre}&${API_KEY}`
+
 
 export async function getMovieDetails(id) {
     const response = await fetch(
@@ -53,19 +50,24 @@ export async function getSelectedGenre(genreId) {
 }
 
 export async function getSortByWithGenre(genreId, sortBy) {
-    console.log("APII", genreId, sortBy);
-    let apiUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&vote_count.gte=1000`;
-  
-    if (genreId === null) {
-      apiUrl += `&sort_by=${getSortByOption(sortBy)}`;
-    } else {
-      apiUrl += `&sort_by=${getSortByOption(sortBy)}&with_genres=${genreId}`;
-    }
-  
-    const response = await fetch(apiUrl);
-  
-    if (!response.ok) {
-      throw new Error("Failed to fetch selected movies");
+  console.log("APII", genreId, sortBy);
+  let apiUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&vote_count.gte=1000`;
+
+  if (genreId === null) {
+    apiUrl += `&sort_by=${getSortByOption(sortBy)}`;
+  } else {
+    apiUrl += `&sort_by=${getSortByOption(sortBy)}&with_genres=${genreId}`;
+  }
+
+  const response = await fetch(apiUrl);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch selected movies");
+  }
+
+  const data = await response.json();
+  return data.results;
+}
 
 export async function getMovieCredits(id) {
     const response = await fetch(
@@ -107,5 +109,5 @@ export async function getMovieReviews(id) {
   
   
 
-};
+
 
