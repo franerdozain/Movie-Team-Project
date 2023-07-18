@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import { getUserFromLocalStorage } from './localStorageManager';
 import Homepage from './components/Homepage/Homepage';
 // import MoviePage from './components/MoviePage/MoviePage';
 import Profile from './components/Profile/Profile';
@@ -24,9 +25,9 @@ function App() {
 
 
   useEffect(() => {
-    const userFromLocalStorage = localStorage.getItem('user');
+    const userFromLocalStorage = getUserFromLocalStorage();
     if (userFromLocalStorage) {
-      setUser(JSON.parse(userFromLocalStorage));
+      setUser(userFromLocalStorage);
     }
   }, []);
 

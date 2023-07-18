@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FaLock, FaUser } from 'react-icons/fa';
 import { Link, useNavigate} from 'react-router-dom';
+import { saveUserToLocalStorage } from '../../localStorageManager';
 
 const users = [
   {
@@ -91,7 +92,7 @@ function Login() {
     );
   
     if (userExists) {
-      localStorage.setItem('user', JSON.stringify(userExists));
+      saveUserToLocalStorage(userExists);
       navigate('/Profile');
     } else {
       setInvalidLogin(true);
