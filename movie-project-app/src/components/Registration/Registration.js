@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { saveUserToLocalStorage } from '../../localStorageManager';
+import { useNavigate } from 'react-router-dom';
 
-function Registration({ registrationData, setRegistrationData }) {
+function Registration() {
+    const [registrationData, setRegistrationData] = useState({
+        username: '',
+        password: '',
+    });
+
     const [confirmPassword, setConfirmPassword] = useState('');
     
     const handleInputChange = (event) => {
@@ -15,13 +22,15 @@ function Registration({ registrationData, setRegistrationData }) {
         setConfirmPassword(event.target.value);
     };
 
+    const navigate = useNavigate();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (registrationData.password === confirmPassword) {
-            localStorage.setItem('registrationData', JSON.stringify(registrationData));
-          // Proceed to next step or show success message
+            saveUserToLocalStorage(registrationData);
+            navigate('/RegistrationStep2');
         } else {
-          // Show error that passwords do not match
+            alert('Error: Passwords do not match.');
         }
     };
 

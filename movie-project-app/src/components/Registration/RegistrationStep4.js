@@ -1,21 +1,42 @@
+import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-function RegistrationStep4({ registrationData, setRegistrationData }) {
+function RegistrationStep4() {
+    const navigate = useNavigate();
     const voiceStyles = ['Spanish Female', 'French Male', 'Italian Female'];
-    const [selectedVoiceStyle, setSelectedVoiceStyle] = useState(registrationData.voiceStyle);
+
+    const initialRegistrationData = getUserFromLocalStorage() || {
+      username: '',
+      password: '',
+      language: '',
+      genres: [],
+      galleryStyle: '',
+      voiceStyle: ''
+    };
+
+    const [registrationData, setRegistrationData] = useState(getUserFromLocalStorage() || {});
+    const [selectedVoiceStyle, setSelectedVoiceStyle] = useState(registrationData.voiceStyle || "");
 
     const handleVoiceStyle = (style) => {
         setSelectedVoiceStyle(style);
     }
 
     const handleSubmit = (event) => {
+      event.preventDefault();
+      const updatedRegistrationData = {
+          ...registrationData,
+          voiceStyle: selectedVoiceStyle,
+      };
+      setRegistrationData(updatedRegistrationData);
+      saveUserToLocalStorage(updatedRegistrationData);
+      navigate('/Login');
+    }
+
+    const handleSkip = (event) => {
         event.preventDefault();
-        setRegistrationData({
-            ...registrationData,
-            voiceStyle: selectedVoiceStyle,
-        });
-        localStorage.setItem('registrationData', JSON.stringify(registrationData));
-        // Proceed to next step or show success message
+        navigate('/Login');
     }
 
   return (

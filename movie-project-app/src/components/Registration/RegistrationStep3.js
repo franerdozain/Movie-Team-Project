@@ -1,8 +1,22 @@
+import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
 
-function RegistrationStep3({ registrationData, setRegistrationData }) {
+function RegistrationStep3() {
+    const navigate = useNavigate();
     const galleryStyles = ['Most popular', 'Top rated', 'Upcoming'];
-    const [selectedGalleryStyle, setSelectedGalleryStyle] = useState(registrationData.galleryStyle);
+
+    const initialRegistrationData = getUserFromLocalStorage() || {
+        username: '',
+        password: '',
+        language: '',
+        genres: [],
+        galleryStyle: ''
+    };
+
+    const [registrationData, setRegistrationData] = useState(getUserFromLocalStorage() || {});
+    const [selectedGalleryStyle, setSelectedGalleryStyle] = useState(registrationData.galleryStyle || "");
 
     const handleGalleryStyle = (style) => {
         setSelectedGalleryStyle(style);
@@ -10,12 +24,18 @@ function RegistrationStep3({ registrationData, setRegistrationData }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setRegistrationData({
+        const updatedRegistrationData = {
             ...registrationData,
             galleryStyle: selectedGalleryStyle,
-        });
-        localStorage.setItem('registrationData', JSON.stringify(registrationData));
-        // Proceed to next step or show success message
+        };
+        setRegistrationData(updatedRegistrationData);
+        saveUserToLocalStorage(updatedRegistrationData);
+        navigate('/RegistrationStep4');
+    }
+
+    const handleSkip = (event) => {
+        event.preventDefault();
+        navigate('/RegistrationStep4');
     }
 
     return (
@@ -43,7 +63,7 @@ function RegistrationStep3({ registrationData, setRegistrationData }) {
                         <div>
                             <button type="submit" className="btn btn-primary">Submit</button>
                             <button type="submit" className="btn btn-primary" 
-                                //onClick={moveNext}
+                                onClick={handleSkip}
                                 >Skip</button>
                         </div>
                     </main>
