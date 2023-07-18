@@ -1,15 +1,57 @@
+import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function RegistrationStep2() {
-    const [genres, setGenres] = useState([]);
-    const [language, setLanguage] = useState('');
+    const [registrationData, setRegistrationData] = useState({
+        username: '',
+        password: '',
+        language: '',
+        genres: []
+    });
 
-    useEffect(() => {
-        //fetch(api)
-    }, []);
+    const [selectedGenres, setSelectedGenres] = useState([]);
+    const genreList = ['Romance', 'Crime', 'Comedy'];
+
+    const handleLanguageChange = (event) => {
+        setRegistrationData({
+            ...registrationData,
+            language: event.target.value,
+        });
+    }
 
     const handleGenreSelection = (genre) => {
-        return
+        setSelectedGenres((prevSelectedGenres) => {
+            if(prevSelectedGenres.includes(genre)) {
+                return prevSelectedGenres.filter((g) => g !== genre);
+            } else {
+                return [...prevSelectedGenres, genre];
+            }
+        });
+    }
+
+    useEffect(() => {
+        const userData = getUserFromLocalStorage();
+        if (userData) {
+            setRegistrationData(userData);
+        }
+    }, []);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const updatedRegistrationData = {
+            ...registrationData,
+            genres: selectedGenres,
+        };
+        saveUserToLocalStorage(updatedRegistrationData);
+        navigate('/RegistrationPage3');
+    }
+
+    const handleSkip = (event) => {
+        event.preventDefault();
+        navigate('/RegistrationStep3');
     }
 
     return (
@@ -20,37 +62,36 @@ function RegistrationStep2() {
                 <hr/>
             </header>
             <main className="my-5">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="languageInput">Please select your preferred movie language:</label>
-                        <input type="text" className="form-control" id="languageInput" placeholder="Start entering language" onChange={setLanguage}/>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="languageInput" 
+                            placeholder="Start entering language" 
+                            onChange={handleLanguageChange}
+                            value={registrationData.language}
+                        />
                 </div>
                 <div className="form-group">
                     <label htmlFor="genreSelection">Please select your favorite movie genres:</label>
                     <div id="genreSelection">
-                        <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Romance</button>
-                        <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Crime</button>
-                         <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Comdey</button>
+                        {genreList.map((genre, index) => (
+                            <button 
+                                type="button" 
+                                className={selectedGenres.includes(genre) ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
+                                key={index} 
+                                onClick={() => handleGenreSelection(genre)}
+                            >
+                                {genre}
+                            </button>
+                        ))}
                     </div>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
                 <button type="submit" className="btn btn-primary" 
-                    //</form>onClick={moveNext}
+                    onClick={handleSkip}
                     >Skip</button>
             </form>
           </main>

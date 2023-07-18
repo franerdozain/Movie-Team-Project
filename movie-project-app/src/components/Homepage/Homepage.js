@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import LoggedOut from './LoggedOut';
 import LoggedIn from './LoggedIn';
+import { getUserFromLocalStorage } from '../../localStorageManager';
 
 function Homepage() {
 
   const [movieItems, setMovieItems] = useState([]);
   const [favoriteGenreItems, setFavoriteGenreItems] = useState([]);
-  const user = 'z'; 
+  const user = getUserFromLocalStorage(); 
   
   const IMG_URL = 'https://image.tmdb.org/t/p/w200';
   const API_KEY = `api_key=d62b9f08c7e24702fe7b7bedf129c3e4`;

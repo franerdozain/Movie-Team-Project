@@ -1,40 +1,78 @@
+import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 function RegistrationStep4() {
-  const handleVoiceStyle = (style) => { };
+    const navigate = useNavigate();
+    const voiceStyles = ['Spanish Female', 'French Male', 'Italian Female'];
 
-  const handleSubmit = () => { };
+    const initialRegistrationData = getUserFromLocalStorage() || {
+      username: '',
+      password: '',
+      language: '',
+      genres: [],
+      galleryStyle: '',
+      voiceStyle: ''
+    };
 
-  const handleSkip = () => { };
+    const [registrationData, setRegistrationData] = useState(getUserFromLocalStorage() || {});
+    const [selectedVoiceStyle, setSelectedVoiceStyle] = useState(registrationData.voiceStyle || "");
+
+    const handleVoiceStyle = (style) => {
+        setSelectedVoiceStyle(style);
+    }
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const updatedRegistrationData = {
+          ...registrationData,
+          voiceStyle: selectedVoiceStyle,
+      };
+      setRegistrationData(updatedRegistrationData);
+      saveUserToLocalStorage(updatedRegistrationData);
+      navigate('/Login');
+    }
+
+    const handleSkip = (event) => {
+        event.preventDefault();
+        navigate('/Login');
+    }
 
   return (
-    <div className="container">
-      <header className="text-center mt-5">
-        <h1>Registration Page</h1>
-        <h3>Dear User, you can end your registration or skip and provide rest of the data later.</h3>
-        <hr/>
-      </header>
-      <div className="form-group">
-        <label htmlFor="voiceSelection">Please select your preferred voice style for text vocalization:</label>
-        <main className="my-5 d-flex flex-column align-items-center">
-          <Button variant="light" size="lg" className="mb-4" onClick={() => handleVoiceStyle('Spanish Female')}>Spanish Female</Button>
-          <Button variant="light" size="lg" className="mb-4" onClick={() => handleVoiceStyle('French Male')}>French Male</Button>
-          <Button variant="light" size="lg" className="mb-4" onClick={() => handleVoiceStyle('Italian Female')}>Italian Female</Button>
-          <div>
-            <button type="submit" className="btn btn-primary" 
-              //</div>onClick={handleSubmit}
-              >Submit</button>
-            <button type="button" className="btn btn-secondary" 
-              //onClick={handleSkip}
-              >Skip</button>
-          </div>
-        </main>
-      </div>
+      <div className="container">
+          <header className="text-center mt-5">
+              <h1>Registration Page</h1>
+              <h3>Dear User, you can end your registration or skip and provide rest of the data later.</h3>
+              <hr/>
+          </header>
+          <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                  <label htmlFor="voiceStyleSelection">Please select your preferred voice style for text vocalization:</label>
+                  <main className="my-5 d-flex flex-column align-items-center">
+                      {voiceStyles.map((style, index) => (
+                          <Button 
+                              variant={selectedVoiceStyle === style ? "primary" : "light"} 
+                              size="lg" 
+                              className="mb-4" 
+                              key={index} 
+                              onClick={() => handleVoiceStyle(style)}
+                          >
+                              {style}
+                          </Button>
+                      ))}
+                      <div>
+                          <button type="submit" className="btn btn-primary">Submit</button>
+                          <button type="button" className="btn btn-secondary" onClick={handleSkip}>Skip</button>
+                      </div>
+                  </main>
+              </div>
+          </form>
       <footer className="footer text-center my-5">
-        <p>&copy; 2023 Movie App</p>
+          <p>&copy; 2023 Movie App</p>
       </footer>
-    </div>
-  );
+      </div>
+    );
 };
 
 export default RegistrationStep4;

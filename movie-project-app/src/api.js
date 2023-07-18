@@ -7,11 +7,10 @@ export async function getMovieDetails(id) {
     const response = await fetch(
         `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
     );
-  
     if (!response.ok) {
         throw new Error("Failed to fetch movie details");
     }
-  
+
     const data = await response.json();
     return data;
 };
@@ -20,7 +19,6 @@ export async function getMovieImages(id) {
     const response = await fetch(
         `${BASE_URL}/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en`
     );
-  
     if (!response.ok) {
         throw new Error("Failed to fetch movie images");
     }
@@ -28,6 +26,7 @@ export async function getMovieImages(id) {
     const data = await response.json();
     return data.backdrops.map((backdrop) => backdrop.file_path);
 };
+
 
 export async function getGenres () {
     const response = await fetch(
@@ -63,10 +62,32 @@ export async function getSortByWithGenre(genreId, sortBy) {
   
     if (!response.ok) {
       throw new Error("Failed to fetch selected movies");
+
+export async function getMovieCredits(id) {
+    const response = await fetch(
+      `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch movie credits");
+    }
+  
+    const data = await response.json();
+    return data;
+};
+
+export async function getMovieReviews(id) {
+    const response = await fetch(
+      `${BASE_URL}/movie/${id}/reviews?api_key=${API_KEY}`
+    );
+  
+    if (!response.ok) {
+      throw new Error("Failed to fetch movie reviews");
+
     }
   
     const data = await response.json();
     return data.results;
+
   }
   
   function getSortByOption(sortBy) {
@@ -81,3 +102,6 @@ export async function getSortByWithGenre(genreId, sortBy) {
   }
   
   
+
+};
+
