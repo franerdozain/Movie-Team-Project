@@ -10,10 +10,10 @@ import Navbar from './components/header';
 import Login from './components/Login/Login';
 
 
-// import Registration from './components/Registration/Registration';
-// import RegistrationStep2 from './components/Registration/RegistrationStep2';
-// import RegistrationStep3 from './components/Registration/RegistrationStep3';
-
+import Registration from './components/Registration/Registration';
+import RegistrationStep2 from './components/Registration/RegistrationStep2';
+import RegistrationStep3 from './components/Registration/RegistrationStep3';
+import RegistrationStep4 from './components/Registration/RegistrationStep4';
 
 
 
@@ -55,8 +55,6 @@ function App() {
           />} />
           
           <Route path="/movie/:id" element={<MoviePage />} />
-{/*
-           
 
 
           <Route path="/Registration" element={<Registration
@@ -72,12 +70,10 @@ function App() {
           <Route path="/RegistrationStep3" element={<RegistrationStep3
          
           />} />
+
+          <Route path="/RegistrationStep4" element={<RegistrationStep4
          
-          <Route path="/MoviePage" element={<MoviePage
-
-
-     
-          />} /> */}
+          />} />
          
         </Routes>
       </div>

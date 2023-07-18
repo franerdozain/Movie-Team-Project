@@ -1,6 +1,15 @@
+import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function RegistrationStep2({ registrationData, setRegistrationData }) {
+function RegistrationStep2() {
+    const [registrationData, setRegistrationData] = useState({
+        username: '',
+        password: '',
+        language: '',
+        genres: []
+    });
+
     const [selectedGenres, setSelectedGenres] = useState([]);
     const genreList = ['Romance', 'Crime', 'Comedy'];
 
@@ -21,14 +30,28 @@ function RegistrationStep2({ registrationData, setRegistrationData }) {
         });
     }
 
+    useEffect(() => {
+        const userData = getUserFromLocalStorage();
+        if (userData) {
+            setRegistrationData(userData);
+        }
+    }, []);
+
+    const navigate = useNavigate();
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        setRegistrationData({
+        const updatedRegistrationData = {
             ...registrationData,
             genres: selectedGenres,
-        });
-        localStorage.setItem('registrationData', JSON.stringify(registrationData));
-        // Proceed to next step or show success message
+        };
+        saveUserToLocalStorage(updatedRegistrationData);
+        navigate('/RegistrationPage3');
+    }
+
+    const handleSkip = (event) => {
+        event.preventDefault();
+        navigate('/RegistrationStep3');
     }
 
     return (
@@ -68,7 +91,7 @@ function RegistrationStep2({ registrationData, setRegistrationData }) {
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
                 <button type="submit" className="btn btn-primary" 
-                    //</form>onClick={moveNext}
+                    onClick={handleSkip}
                     >Skip</button>
             </form>
           </main>
