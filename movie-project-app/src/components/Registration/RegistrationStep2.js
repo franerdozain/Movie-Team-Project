@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from 'react';
 
-function RegistrationStep2() {
-    const [genres, setGenres] = useState([]);
-    const [language, setLanguage] = useState('');
+function RegistrationStep2({ registrationData, setRegistrationData }) {
+    const [selectedGenres, setSelectedGenres] = useState([]);
+    const genreList = ['Romance', 'Crime', 'Comedy'];
 
-    useEffect(() => {
-        //fetch(api)
-    }, []);
+    const handleLanguageChange = (event) => {
+        setRegistrationData({
+            ...registrationData,
+            language: event.target.value,
+        });
+    }
 
     const handleGenreSelection = (genre) => {
-        return
+        setSelectedGenres((prevSelectedGenres) => {
+            if(prevSelectedGenres.includes(genre)) {
+                return prevSelectedGenres.filter((g) => g !== genre);
+            } else {
+                return [...prevSelectedGenres, genre];
+            }
+        });
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setRegistrationData({
+            ...registrationData,
+            genres: selectedGenres,
+        });
+        localStorage.setItem('registrationData', JSON.stringify(registrationData));
+        // Proceed to next step or show success message
     }
 
     return (
@@ -20,32 +39,31 @@ function RegistrationStep2() {
                 <hr/>
             </header>
             <main className="my-5">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="languageInput">Please select your preferred movie language:</label>
-                        <input type="text" className="form-control" id="languageInput" placeholder="Start entering language" onChange={setLanguage}/>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="languageInput" 
+                            placeholder="Start entering language" 
+                            onChange={handleLanguageChange}
+                            value={registrationData.language}
+                        />
                 </div>
                 <div className="form-group">
                     <label htmlFor="genreSelection">Please select your favorite movie genres:</label>
                     <div id="genreSelection">
-                        <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Romance</button>
-                        <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Crime</button>
-                         <button 
-                            type="button" 
-                            className="btn btn-primary m-2" 
-                            //key={genre.id} 
-                            //onClick={handleGenreSelection}
-                        >Comdey</button>
+                        {genreList.map((genre, index) => (
+                            <button 
+                                type="button" 
+                                className={selectedGenres.includes(genre) ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
+                                key={index} 
+                                onClick={() => handleGenreSelection(genre)}
+                            >
+                                {genre}
+                            </button>
+                        ))}
                     </div>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
