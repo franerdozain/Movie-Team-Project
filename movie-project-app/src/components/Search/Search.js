@@ -108,8 +108,8 @@ export default function Search() {
           </Col>
           <Col md={10}>
             <div className="row row-cols-4">
-              {movies.map((item) => (
-                <SearchCard key={item.id} item={item} />
+              {movies.map((movie) => (
+                <SearchCard key={movie.id} movie={movie} />
               ))}
             </div>
           </Col>
