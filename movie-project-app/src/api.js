@@ -1,6 +1,6 @@
 import Homepage from "./components/Homepage/Homepage";
 
-const API_KEY = `api_key=d62b9f08c7e24702fe7b7bedf129c3e4`;
+const API_KEY = `d62b9f08c7e24702fe7b7bedf129c3e4`;
 const BASE_URL = `https://api.themoviedb.org/3`;
 
 export async function getMovieDetails(id) {
@@ -28,3 +28,23 @@ export async function getMovieImages(id) {
     const data = await response.json();
     return data.backdrops.map((backdrop) => backdrop.file_path);
 };
+
+export async function getGenres () {
+    const response = await fetch(
+        `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch movie genres");
+        }
+        const data = await response.json()
+    return data.genres;
+}
+
+export async function getSelectedGenre(genreId) {
+    const response = await fetch(
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`)
+        if (!response.ok) {
+            throw new Error("Failed to fetch selected genre movies");
+        }
+        const data = await response.json()
+    return data.results;
+}
