@@ -1,7 +1,11 @@
-import Homepage from "./components/Homepage/Homepage";
+
 
 const API_KEY = `d62b9f08c7e24702fe7b7bedf129c3e4`;
 const BASE_URL = `https://api.themoviedb.org/3`;
+const IMG_URL = 'https://image.tmdb.org/t/p/w200';
+const upcoming_movie_API_URL = `${BASE_URL}/movie/upcoming?language=en-US&page=1&${API_KEY}`;
+const main_gallery_API_URL = `${BASE_URL}/movie/popular?language=en-US&page=1&${API_KEY}`;
+const favorite_genre_API_URL = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${favoriteGenre}&${API_KEY}`
 
 export async function getMovieDetails(id) {
     const response = await fetch(
