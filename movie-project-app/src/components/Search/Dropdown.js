@@ -9,7 +9,8 @@ export default function Dropdown({setSelectedFilter, setFilterDropdownTitle, fil
     
     const handleClick = (selectedSortBy) => {
         if(selectedSortBy === "Clear"){
-            setFilterDropdownTitle(null)
+            setSelectedFilter(null)
+            setFilterDropdownTitle("Sort By")
         } else {
             setFilterDropdownTitle(selectedSortBy);
             setSelectedFilter(selectedSortBy);
@@ -19,7 +20,7 @@ export default function Dropdown({setSelectedFilter, setFilterDropdownTitle, fil
     return (
         <>
             <button className="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-expanded="false" >
-                {filterDropdownTitle || "Sort By"}
+                {filterDropdownTitle}
             </button>
             <ul className="dropdown-menu">
                 <li role="button" className="dropdown-item" onClick={(event) => handleClick(event.target.innerText)}>Clear</li>

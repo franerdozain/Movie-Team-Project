@@ -50,13 +50,14 @@ export async function getSelectedGenre(genreId) {
 }
 
 export async function getSortByWithGenre(genreId, sortBy) {
-  console.log("APII", genreId, sortBy);
   let apiUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&vote_count.gte=1000`;
 
-  if (genreId === null) {
+  if (genreId !== null) {
+    apiUrl += `&with_genres=${genreId}`;
+  }
+
+  if (sortBy !== null) {
     apiUrl += `&sort_by=${getSortByOption(sortBy)}`;
-  } else {
-    apiUrl += `&sort_by=${getSortByOption(sortBy)}&with_genres=${genreId}`;
   }
 
   const response = await fetch(apiUrl);
@@ -107,7 +108,12 @@ export async function getMovieReviews(id) {
     return sortByOptions[sortBy];
   }
   
-  
-
-
-
+export async function getSearchedMovies(movie) {
+  const response = await fetch(
+      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${movie}`)
+      if (!response.ok) {
+          throw new Error("Failed to fetch searched movies");
+      }
+      const data = await response.json()
+  return data.results;
+}
