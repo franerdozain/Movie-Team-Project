@@ -1,6 +1,6 @@
 import Homepage from "./components/Homepage/Homepage";
 
-const API_KEY = `api_key=d62b9f08c7e24702fe7b7bedf129c3e4`;
+const API_KEY = `d62b9f08c7e24702fe7b7bedf129c3e4`;
 const BASE_URL = `https://api.themoviedb.org/3`;
 
 export async function getMovieDetails(id) {

@@ -4,35 +4,35 @@ import { getMovieDetails, getMovieImages, getMovieCredits, getMovieReviews } fro
 import { IoPlay, IoVolumeHigh } from "react-icons/io5";
 
 function MoviePage() {
-    const { id } = useParams();
-    const [movie, setMovie] = useState(null);
-    const [images, setImages] = useState([]);
-    const [director, setDirector] = useState("");
-    const [actors, setActors] = useState([]);
-    const [reviews, setReviews] = useState([]);
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [images, setImages] = useState([]);
+  const [director, setDirector] = useState("");
+  const [actors, setActors] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
-    useEffect(() => {
-        getMovieDetails(id)
-            .then((movie) => setMovie(movie))
-            .catch((error) => console.error("Failed to fetch movie details", error));
-    
-        getMovieImages(id)
-            .then((images) => setImages(images))
-            .catch((error) => console.error("Failed to fetch movie images", error));
-    
-        getMovieCredits(id)
-            .then((credits) => {
-                const director = credits.crew.find(crew => crew.job === "Director")?.name;
-                setDirector(director);
-                const actors = credits.cast.slice(0, 6).map(actor => actor.name);
-                setActors(actors);
-            })
-            .catch((error) => console.error("Failed to fetch movie credits", error));
-          
-        getMovieReviews(id)
-            .then((reviews) => setReviews(reviews))
-            .catch((error) => console.error("Failed to fetch movie reviews", error));
-      }, [id]);
+  useEffect(() => {
+    getMovieDetails(id)
+      .then((movie) => setMovie(movie))
+      .catch((error) => console.error("Failed to fetch movie details", error));
+
+    getMovieImages(id)
+      .then((images) => setImages(images))
+      .catch((error) => console.error("Failed to fetch movie images", error));
+
+    getMovieCredits(id)
+      .then((credits) => {
+        const director = credits.crew.find(crew => crew.job === "Director")?.name;
+        setDirector(director);
+        const actors = credits.cast.slice(0, 6).map(actor => actor.name);
+        setActors(actors);
+      })
+      .catch((error) => console.error("Failed to fetch movie credits", error));
+      
+    getMovieReviews(id)
+      .then((reviews) => setReviews(reviews))
+      .catch((error) => console.error("Failed to fetch movie reviews", error));
+    }, [id]);
 
     if (!movie || !images) return <div>Loading...</div>;
 
@@ -60,7 +60,7 @@ function MoviePage() {
                     <div className="card">
                         <div className="card-body">
                             <h5 className="card-title">{movie.title} ({new Date(movie.release_date).getFullYear()})</h5>
-                            <p className="card-text">{movie.genres.map(genre => genre.name).join(', ')}</p>
+                            <p className="card-text">{movie.genres ? movie.genres.map(genre => genre.name).join(', ') : 'No Genres'}</p>
                             <p className="card-text">{movie.runtime} minutes</p>
                             <p className="card-text">{director}</p>
                             <p className="card-text">{actors.join(', ')}</p>
@@ -75,7 +75,7 @@ function MoviePage() {
                     <div className="card">
                         <div className="card-body">
                             <h5 className="card-title">Reviews</h5>
-                            {movie.reviews.length > 0 ? (
+                            {reviews.length > 0 ? (
                                 <div>
                                     <p className="card-text">{reviews[0]?.content}</p>
                                     <button className="btn btn-primary">Show All</button>
@@ -92,7 +92,7 @@ function MoviePage() {
                 </div>
             </div>
             <div className="card-columns">
-                {movie.images.map((image, index) => (
+                {images.map((image, index) => (
                     <div className="card" key={index}>
                         <img 
                             src={`https://image.tmdb.org/t/p/w500${image}`} 
