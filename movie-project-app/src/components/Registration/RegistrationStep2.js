@@ -11,7 +11,7 @@ function RegistrationStep2() {
         genres: []
     });
 
-    const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedGenre, setSelectedGenre] = useState(null);
     const [genreList, setGenreList] = useState([]);
 
     const handleLanguageChange = (event) => {
@@ -22,13 +22,7 @@ function RegistrationStep2() {
     }
 
     const handleGenreSelection = (genre) => {
-        setSelectedGenres((prevSelectedGenres) => {
-            if(prevSelectedGenres.find(g => g.id === genre.id)) {
-                return prevSelectedGenres.filter((g) => g.id !== genre.id);
-            } else {
-                return [...prevSelectedGenres, genre];
-            }
-        });
+        setSelectedGenre(genre);
     }
 
     useEffect(() => {
@@ -52,7 +46,7 @@ function RegistrationStep2() {
         event.preventDefault();
         const updatedRegistrationData = {
             ...registrationData,
-            genres: selectedGenres.map(g => g.id),
+            genres: selectedGenre ? [selectedGenre.id] : [],
         };
         saveUserToLocalStorage(updatedRegistrationData);
         navigate('/RegistrationStep3');
@@ -87,11 +81,11 @@ function RegistrationStep2() {
                 <div className="form-group">
                     <label htmlFor="genreSelection">Please select your favorite movie genres:</label>
                     <div id="genreSelection">
-                        {genreList.map((genre, index) => (
+                        {genreList.map((genre) => (
                             <button 
                                 type="button" 
-                                className={selectedGenres.find(g => g.id === genre.id) ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
-                                key={index} 
+                                className={selectedGenre && selectedGenre.id === genre.id ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
+                                key={genre.id}
                                 onClick={() => handleGenreSelection(genre)}
                             >
                                 {genre.name}

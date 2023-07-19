@@ -6,52 +6,61 @@ import { getUserFromLocalStorage } from '../../localStorageManager';
 
 
 function MoviePage() {
-  const { id } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [images, setImages] = useState([]);
-  const [director, setDirector] = useState("");
-  const [actors, setActors] = useState([]);
-  const [reviews, setReviews] = useState([]);
+    const { id } = useParams();
+    const [movie, setMovie] = useState(null);
+    const [images, setImages] = useState([]);
+    const [director, setDirector] = useState("");
+    const [actors, setActors] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [reviewIndex, setReviewIndex] = useState(0);
 
-  const [isPlaying, setIsPlaying] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    Promise.all([
-      getMovieDetails(id),
-      getMovieImages(id),
-      getMovieCredits(id),
-      getMovieReviews(id),
-    ]).then(([movie, images, credits, reviews]) => {
-      setMovie(movie);
-      setImages(images);
+    const handleShowNext = () => {
+        if (reviewIndex < reviews.length - 1) {
+        setReviewIndex(reviewIndex + 1);
+        } else {
+        setReviewIndex(0);
+        }
+    };
 
-      const director = credits.crew.find(crew => crew.job === "Director")?.name;
-      setDirector(director);
-      const actors = credits.cast.slice(0, 6).map(actor => actor.name);
-      setActors(actors);
+    useEffect(() => {
+        Promise.all([
+        getMovieDetails(id),
+        getMovieImages(id),
+        getMovieCredits(id),
+        getMovieReviews(id),
+        ]).then(([movie, images, credits, reviews]) => {
+        setMovie(movie);
+        setImages(images);
 
-      setReviews(reviews);
-    }).catch((error) => {
-      console.error("Failed to fetch movie data", error);
-    });
-  }, [id]);
+        const director = credits.crew.find(crew => crew.job === "Director")?.name;
+        setDirector(director);
+        const actors = credits.cast.slice(0, 6).map(actor => actor.name);
+        setActors(actors);
+
+        setReviews(reviews);
+        }).catch((error) => {
+        console.error("Failed to fetch movie data", error);
+        });
+    }, [id]);
   
-  if (!movie || !images) return <div>Loading...</div>;
+    if (!movie || !images) return <div>Loading...</div>;
 
-  const handleVoiceover = (text) => {
-    if (typeof window.responsiveVoice === 'undefined') {
-        console.error("ResponsiveVoice is not loaded yet.");
-        return;
-    }
-    if (isPlaying) {
-        window.responsiveVoice.cancel();
-        setIsPlaying(false);
-    } else {
-        let user = getUserFromLocalStorage();
-        const voiceStyle = user && user.voiceStyle ? user.voiceStyle : 'US English Female';
-        window.responsiveVoice.speak(text, voiceStyle, { onstart: () => setIsPlaying(true), onend: () => setIsPlaying(false) });
-    }
-};
+    const handleVoiceover = (text) => {
+        if (typeof window.responsiveVoice === 'undefined') {
+            console.error("ResponsiveVoice is not loaded yet.");
+            return;
+        }
+        if (isPlaying) {
+            window.responsiveVoice.cancel();
+            setIsPlaying(false);
+        } else {
+            let user = getUserFromLocalStorage();
+            const voiceStyle = user && user.voiceStyle ? user.voiceStyle : 'US English Female';
+            window.responsiveVoice.speak(text, voiceStyle, { onstart: () => setIsPlaying(true), onend: () => setIsPlaying(false) });
+        }
+    };
 
     return (
         <div className="container mt-3 mb-3">
@@ -90,8 +99,10 @@ function MoviePage() {
                             <h5 className="card-title">Reviews</h5>
                             {reviews.length > 0 ? (
                                 <div>
-                                    <p className="card-text">{reviews[0]?.content}</p>
-                                    <button className="btn btn-primary">Show All</button>
+                                <p className="card-text">{reviews[reviewIndex]?.content}</p>
+                                <button className="btn btn-primary" onClick={handleShowNext}>
+                                    {reviewIndex < reviews.length - 1 ? 'Show Next' : 'Turn to First'}
+                                </button>
                                 </div>
                             ) : (
                                 <p>No reviews yet</p>
@@ -100,6 +111,7 @@ function MoviePage() {
                     </div>
                 </div>
             </div>
+            <div className="my-4"></div>
             <div className="card-columns">
                 {images.map((image, index) => (
                     <div className="card" key={index}>
