@@ -1,107 +1,110 @@
-import { FaGlobe, FaRegImages, FaTheaterMasks, FaVolumeUp, FaRegEdit } from 'react-icons/fa';
+import { FaGlobe, FaRegImages, FaTheaterMasks, FaVolumeUp } from 'react-icons/fa';
+import FormField from './FormField';
+import { getUserFromLocalStorage, saveUserToLocalStorage, clearUserFromLocalStorage } from '../../localStorageManager';
+import { useState } from 'react';
 
 export default function Profile() {
-  const testMoviesArray = [
-    {
-      "title": "Pulp Fiction",
-    },
-    {
-      "title": "Mario Bros"
-    },
-    {
-      "title": "Coco"
-    },
-    {
-      "title": "The Notebook"
+  const userDataInLocalStorage = getUserFromLocalStorage();
+  const [userData, setUserData] = useState(userDataInLocalStorage[0]);
+  const [selectedMoviesToDelete, setSelectedMoviesToDelete] = useState([]);
+
+  const handleSaveClick = () => {
+    clearUserFromLocalStorage()
+    saveUserToLocalStorage(userData);
+  };
+
+  const handleMovieSelection = (event, index) => {
+    if (event.target.checked) {
+      setSelectedMoviesToDelete((prevSelectedMovies) => [
+        ...prevSelectedMovies,
+        index
+      ]);
+    } else {
+      setSelectedMoviesToDelete((prevSelectedMovies) =>
+        prevSelectedMovies.filter((movieIndex) => movieIndex !== index)
+      );
     }
-  ]
+  };
+
+  const deleteSelectedMovies = () => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      history: prevUserData.history.filter((index) => !selectedMoviesToDelete.includes(index))
+    }));
+    
+    const updatedUserData = {
+      ...userData,
+      history: userData.history.filter((index) => !selectedMoviesToDelete.includes(index))
+    };
+    clearUserFromLocalStorage()
+    saveUserToLocalStorage(updatedUserData);
+    
+    setSelectedMoviesToDelete([]);
+  };
+  
+  const deleteAllMovies = () => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      history: []
+    }));
+  
+    const updatedUserData = {
+      ...userData,
+      history: []
+    };
+    clearUserFromLocalStorage()
+    saveUserToLocalStorage(updatedUserData);
+  
+    setSelectedMoviesToDelete([]);
+  };
 
   return (
     <div className="container d-flex justify-content-around">
       <div className='d-flex flex-column  border rounded'>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="form-group text-center">
-              <label for="selectedLanguage" className="form-label">Favorite Language</label>
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text"><FaGlobe /></span>
-                </div>
-                <input type="text" className="form-control" id="selectedLanguage" placeholder="selected lang / - " />
-                <div className="input-group-append">
-                  <span className="input-group-text"><FaRegEdit /></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            <div className="form-group text-center">
-              <label for="selectedGenre" className="form-label">Favorite Genre</label>
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text"><FaTheaterMasks /></span>
-                </div>
-                <input type="text" className="form-control" id="selectedGenre" placeholder="selected genre / - " />
-                <div className="input-group-append">
-                  <span className="input-group-text"><FaRegEdit /></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            <div className="form-group text-center">
-              <label for="selectedGallery" className="form-label">Gallery To Show On Home Page</label>
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text"><FaRegImages /></span>
-                </div>
-                <input type="text" className="form-control" id="selectedGallery" placeholder="selected gallery / - " />
-                <div className="input-group-append">
-                  <span className="input-group-text"><FaRegEdit /></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            <div className="form-group text-center">
-              <label for="selectedVoice" className="form-label">Voice To Hearing Text</label>
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text"><FaVolumeUp /></span>
-                </div>
-                <input type="text" className="form-control" id="selectedVoice" placeholder="selected voice / - " />
-                <div className="input-group-append">
-                  <span className="input-group-text"><FaRegEdit /></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <FormField
+          label="Favorite Language"
+          icon={<FaGlobe />}
+          value={userData.language}
+          onChange={(value) => setUserData({ ...userData, language: value })} />
+        <FormField
+          label="Favorite Genre"
+          icon={<FaTheaterMasks />}
+          value={userData.favoriteGenre}
+          onChange={(value) => setUserData({ ...userData, favoriteGenre: value })} />
+        <FormField
+          label="Gallery To Show On Home Page"
+          icon={<FaRegImages />}
+          value={userData.mainGallery}
+          onChange={(value) => setUserData({ ...userData, mainGallery: value })} />
+        <FormField
+          label="Voice To Hearing Text"
+          icon={<FaVolumeUp />}
+          value={userData.voice}
+          onChange={(value) => setUserData({ ...userData, voice: value })} />
       </div>
+      <button className="btn btn-primary" onClick={handleSaveClick}>
+        Save
+      </button>
 
       <div className="col-md-6 d-flex flex-column justify-content-between border rounded">
         <div className="list-group">
-          {testMoviesArray.map((movie, index) => (
+          {userDataInLocalStorage[0].history.map((movie, index) => (
             <div className="list-group-item border-0" key={index}>
-              <input type="checkbox" className='mr-2' />
-              {movie.title}
+              <input 
+              type="checkbox" 
+              className='mr-2' 
+              onChange={(e) => handleMovieSelection(e, index)}
+              />
+              
+              {movie}
             </div>
           ))}
         </div>
         <div className='d-flex justify-content-around mb-3'>
-          <button className="btn btn-secondary">
+          <button className="btn btn-secondary" onClick={deleteSelectedMovies} disabled={selectedMoviesToDelete.length === 0}>
             Delete Selected Ones
           </button>
-          <button className="btn btn-danger">
+          <button className="btn btn-danger" onClick={deleteAllMovies} disabled={userData.history.length === 0}>
             Delete All
           </button>
         </div>
