@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FaLock, FaUser } from 'react-icons/fa';
 import { Link, useNavigate} from 'react-router-dom';
-import { saveUserToLocalStorage } from '../../localStorageManager';
+import { saveUserToLocalStorage, getUsersFromLocalStorage } from '../../localStorageManager';
 
 
 

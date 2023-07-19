@@ -1,6 +1,7 @@
 import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getGenres } from '../../api';
 
 function RegistrationStep2() {
     const [registrationData, setRegistrationData] = useState({
@@ -11,7 +12,8 @@ function RegistrationStep2() {
     });
 
     const [selectedGenres, setSelectedGenres] = useState([]);
-    const genreList = ['Romance', 'Crime', 'Comedy'];
+    
+    const [genreList, setGenreList] = useState([]);
 
     const handleLanguageChange = (event) => {
         setRegistrationData({
@@ -31,6 +33,10 @@ function RegistrationStep2() {
     }
 
     useEffect(() => {
+        getGenres().then((genres) => {
+          setGenreList(genres.map((genre) => genre.name));
+        });
+
         const userData = getUserFromLocalStorage();
         if (userData) {
             setRegistrationData(userData);

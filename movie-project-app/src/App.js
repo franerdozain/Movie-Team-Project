@@ -8,6 +8,7 @@ import Profile from './components/Profile/Profile';
 import Search from './components/Search/Search';
 import Navbar from './components/header';
 import Login from './components/Login/Login';
+import Footer from './components/footer';
 
 
 import Registration from './components/Registration/Registration';
@@ -81,6 +82,8 @@ function App() {
           />} />
          
         </Routes>
+
+        <Footer />
       </div>
     );
   }
