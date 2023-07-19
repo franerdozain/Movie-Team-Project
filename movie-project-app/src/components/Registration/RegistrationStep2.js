@@ -46,7 +46,7 @@ function RegistrationStep2() {
             genres: selectedGenres,
         };
         saveUserToLocalStorage(updatedRegistrationData);
-        navigate('/RegistrationPage3');
+        navigate('/RegistrationStep3');
     }
 
     const handleSkip = (event) => {

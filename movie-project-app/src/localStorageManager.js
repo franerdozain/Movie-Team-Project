@@ -1,4 +1,5 @@
 const KEY_USER = 'user';
+const KEY_USERS = 'users';
 
 export const saveUserToLocalStorage = (user) => {
   try {
@@ -7,6 +8,18 @@ export const saveUserToLocalStorage = (user) => {
     console.error('Error saving user to local storage:', error);
   }
 };
+
+export const saveUserToUsersArray = (user) => {
+  try {
+    const usersFromLocalStorage = localStorage.getItem(KEY_USERS);
+    const usersArray = usersFromLocalStorage ? JSON.parse(usersFromLocalStorage) : [];
+    usersArray.push(user);
+    localStorage.setItem(KEY_USERS, JSON.stringify(usersArray));
+  } catch (error) {
+    console.error('Error saving user to users array in local storage:', error)
+  
+  }
+}
 
 export const getUserFromLocalStorage = () => {
   try {

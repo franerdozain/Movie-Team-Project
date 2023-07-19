@@ -1,4 +1,4 @@
-import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
+import { getUserFromLocalStorage, saveUserToLocalStorage, saveUserToUsersArray } from '../../localStorageManager';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
@@ -31,11 +31,13 @@ function RegistrationStep4() {
       };
       setRegistrationData(updatedRegistrationData);
       saveUserToLocalStorage(updatedRegistrationData);
+      saveUserToUsersArray(updatedRegistrationData);
       navigate('/Login');
     }
 
     const handleSkip = (event) => {
         event.preventDefault();
+        saveUserToUsersArray(registrationData);
         navigate('/Login');
     }
 
