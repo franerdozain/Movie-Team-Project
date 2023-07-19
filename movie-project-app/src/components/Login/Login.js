@@ -4,26 +4,7 @@ import { FaLock, FaUser } from 'react-icons/fa';
 import { Link, useNavigate} from 'react-router-dom';
 import { saveUserToLocalStorage } from '../../localStorageManager';
 
-const users = [
-  {
-    username: 'Bart',
-    password: 'Pass1',
-    language: 'en-US',
-    favoriteGenre: '18',
-    mainGallery: 'popular',
-    voice: 'Spanish Female',
-    history: ['Pulp Fiction','Mario Bros','Coco','The Notebook']
-  },
-  {
-    username: 'Colby',
-    password: 'Pass2',
-    language: 'en-US',
-    favoriteGenre: '18',
-    mainGallery: 'popular',
-    voice: 'Spanish Female',
-    history: ['Hunger Games','Fast X']
-  }
-];
+
 
 const formFields = [
   {
@@ -53,6 +34,8 @@ function Login() {
   });
   const [invalidLogin, setInvalidLogin] = useState(false);
   const navigate = useNavigate();
+
+  const users = getUsersFromLocalStorage() || [];
 
   const FormInput = ({label,icon,type,name,defaultValue,placeholder,onInputChange,invalid}) => {
     const handleBlur = (event) => {

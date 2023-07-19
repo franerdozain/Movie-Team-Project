@@ -31,6 +31,16 @@ export const getUserFromLocalStorage = () => {
   }
 };
 
+export const getUsersFromLocalStorage = () => {
+  try {
+    const usersFromLocalStorage = localStorage.getItem(KEY_USERS);
+    return usersFromLocalStorage ? JSON.parse(usersFromLocalStorage) : [];
+  } catch (error) {
+    console.error('Error getting users from local storage:', error);
+    return [];
+  }
+};
+
 export const clearUserFromLocalStorage = () => {
   try {
     localStorage.removeItem(KEY_USER);
