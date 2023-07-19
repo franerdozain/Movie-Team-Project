@@ -1,12 +1,14 @@
 import { FaGlobe, FaRegImages, FaTheaterMasks, FaVolumeUp } from 'react-icons/fa';
 import FormField from './FormField';
 import { getUserFromLocalStorage, saveUserToLocalStorage, clearUserFromLocalStorage } from '../../localStorageManager';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Profile() {
   const userDataInLocalStorage = getUserFromLocalStorage();
   const [userData, setUserData] = useState(userDataInLocalStorage[0]);
   const [selectedMoviesToDelete, setSelectedMoviesToDelete] = useState([]);
+
+ 
 
   const handleSaveClick = () => {
     clearUserFromLocalStorage()
@@ -27,18 +29,13 @@ export default function Profile() {
   };
 
   const deleteSelectedMovies = () => {
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      history: prevUserData.history.filter((index) => !selectedMoviesToDelete.includes(index))
-    }));
-    
-    const updatedUserData = {
-      ...userData,
-      history: userData.history.filter((index) => !selectedMoviesToDelete.includes(index))
-    };
-    clearUserFromLocalStorage()
-    saveUserToLocalStorage(updatedUserData);
-    
+    setUserData((prevUserData) => {
+      const updatedHistory = prevUserData.history.filter((_, index) => !selectedMoviesToDelete.includes(index));
+      const updatedUserData = { ...prevUserData, history: updatedHistory };
+      clearUserFromLocalStorage()
+      saveUserToLocalStorage(updatedUserData);
+      return updatedUserData;
+    });
     setSelectedMoviesToDelete([]);
   };
   
@@ -57,6 +54,10 @@ export default function Profile() {
   
     setSelectedMoviesToDelete([]);
   };
+
+  useEffect(() => {
+    setUserData(userDataInLocalStorage[0]);
+  }, [userDataInLocalStorage]);
 
   return (
     <div className="container d-flex justify-content-around">
