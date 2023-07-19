@@ -14,6 +14,7 @@ function LoggedIn(props) {
           <div className='row'>
             {props.movieItems.map((item) => (
               <CardComponent
+                key={item.id}
                 id={item.id}
                 image={props.IMG_URL + item.poster_path}
                 title={item.title}
@@ -30,6 +31,7 @@ function LoggedIn(props) {
           <div className='row border'>
             {props.favoriteGenreItems.map((item) => (
               <CardComponent
+                key={item.id}
                 id={item.id}
                 image={props.IMG_URL + item.poster_path}
                 title={item.title}

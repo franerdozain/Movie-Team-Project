@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { getUsersFromLocalStorage, saveUserToUsersArray } from '../../localStorageManager';
+import { getUsersFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
 import { useNavigate } from 'react-router-dom';
 
 function Registration() {
@@ -10,11 +10,12 @@ function Registration() {
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [message, setMessage] = useState('');
     
     const handleInputChange = (event) => {
         setRegistrationData({
-            ...registrationData,
-            [event.target.name]: event.target.value,
+          ...registrationData,
+          [event.target.name]: event.target.value,
         });
     };
 
@@ -26,34 +27,34 @@ function Registration() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+      
         const usernameRegex = /^[a-zA-Z0-9]{3,10}$/;
         const passwordRegex = /^[a-zA-Z0-9_\-!\*]{5,10}$/;
-
+      
         if (!usernameRegex.test(registrationData.username)) {
-            alert('Name should have 3-10 characters and alphanumerics only.');
+            setMessage('Name should have 3-10 characters and alphanumerics only.');
             return;
         }
-
+      
         if (!passwordRegex.test(registrationData.password)) {
-            alert('Password should have 5-10 characters and can contain only alphanumerics (or _, -, !, * sign).');
+            setMessage('Password should have 5-10 characters and can contain only alphanumerics (or _, -, !, * sign).');
             return;
         }
-
+      
         if (registrationData.password !== confirmPassword) {
-            alert('Error: Passwords do not match.');
+            setMessage('Error: Passwords do not match.');
             return;
         }
 
         const users = getUsersFromLocalStorage();
         if (users.find(user => user.username === registrationData.username)) {
-            alert('Error: Username already exists.');
-            return;
+        setMessage('Error: Username already exists.');
+        return;
         }
-
-        saveUserToUsersArray(registrationData);
+      
+        saveUserToLocalStorage(registrationData);
         navigate('/RegistrationStep2');
-    };
+      };
 
   return (
     <div className="container">
@@ -63,6 +64,7 @@ function Registration() {
             <hr/>
         </header>
         <main className="my-5">
+            {message && <div className="alert alert-danger">{message}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="userInput">Username</label>
@@ -113,7 +115,9 @@ function Registration() {
                         />
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="d-flex justify-content-around" style={{ width: "200px" }}>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </div>
             </form>
         </main>
     </div>

@@ -1,22 +1,30 @@
 import { getUserFromLocalStorage, saveUserToLocalStorage } from '../../localStorageManager';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function RegistrationStep3() {
     const navigate = useNavigate();
-    const galleryStyles = ['Most popular', 'Top rated', 'Upcoming'];
+    const galleryStyles = ['popular', 'top_rated', 'upcoming'];
+    const galleryStyleLabels = { popular: 'Most Popular', top_rated: 'Top Rated', upcoming: 'Upcoming' };
 
-    const initialRegistrationData = getUserFromLocalStorage() || {
+    const [registrationData, setRegistrationData] = useState({
         username: '',
         password: '',
         language: '',
         genres: [],
         galleryStyle: ''
-    };
+    });
 
-    const [registrationData, setRegistrationData] = useState(getUserFromLocalStorage() || {});
-    const [selectedGalleryStyle, setSelectedGalleryStyle] = useState(registrationData.galleryStyle || "");
+    const [selectedGalleryStyle, setSelectedGalleryStyle] = useState("");
+
+    useEffect(() => {
+        const userData = getUserFromLocalStorage();
+        if (userData) {
+            setRegistrationData(userData);
+            setSelectedGalleryStyle(userData.galleryStyle || "");
+        }
+    }, []);
 
     const handleGalleryStyle = (style) => {
         setSelectedGalleryStyle(style);
@@ -49,31 +57,28 @@ function RegistrationStep3() {
                 <div className="form-group">
                     <label htmlFor="galleryStyleSelection">Please select your preferred gallery style for the home page:</label>
                     <main className="my-5 d-flex flex-column align-items-center">
-                        {galleryStyles.map((style, index) => (
+                        {galleryStyles.map((style) => (
                             <Button 
                                 variant={selectedGalleryStyle === style ? "primary" : "light"} 
                                 size="lg" 
                                 className="mb-4" 
-                                key={index} 
+                                key={style} 
                                 onClick={() => handleGalleryStyle(style)}
                             >
-                                {style}
+                                {galleryStyleLabels[style]}
                             </Button>
                         ))}
-                        <div>
+                        <div className="d-flex justify-content-around" style={{ width: "200px" }}>
                             <button type="submit" className="btn btn-primary">Submit</button>
-                            <button type="submit" className="btn btn-primary" 
+                            <button type="button" className="btn btn-primary" 
                                 onClick={handleSkip}
                                 >Skip</button>
                         </div>
                     </main>
                 </div>
             </form>
-            <footer className="footer text-center my-5">
-                <p>&copy; 2023 Movie App</p>
-            </footer>
         </div>
     );
 };
-    
+
 export default RegistrationStep3;
