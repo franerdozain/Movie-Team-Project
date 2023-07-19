@@ -1,79 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FaLock, FaUser } from 'react-icons/fa';
-import { Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { saveUserToLocalStorage, getUsersFromLocalStorage } from '../../localStorageManager';
 
-
-
 const formFields = [
-  {
-    label: 'Username',
-    icon: <FaUser />,
-    type: 'username',
-    name: 'username',
-    defaultValue: '',
-    placeholder: 'Enter Username',
-  },
-  {
-    label: 'Password',
-    icon: <FaLock />,
-    type: 'password',
-    name: 'password',
-    defaultValue: '',
-    placeholder: 'Enter Password',
-  }
+  { label: 'Username', icon: <FaUser />, name: 'username', placeholder: 'Enter Username' },
+  { label: 'Password', icon: <FaLock />, name: 'password', placeholder: 'Enter Password' }
 ];
 
 const message = "We couldn't log you in. Please check your email and password and try again.";
 
 function Login() {
-  const [info, setInfo] = useState({
-    username: '',
-    password: ''
-  });
+  const [info, setInfo] = useState({ username: '', password: '' });
   const [invalidLogin, setInvalidLogin] = useState(false);
   const navigate = useNavigate();
-
   const users = getUsersFromLocalStorage() || [];
 
-  const FormInput = ({label,icon,type,name,defaultValue,placeholder,onInputChange,invalid}) => {
-    const handleBlur = (event) => {
-      const { name, value } = event.target;
-      onInputChange(name, value);
-    };
-  
-
-    return (
-      <Form.Group controlId={`form${name}`}>
-        <Form.Label>{label}</Form.Label>
-        <InputGroup>
-          <InputGroup.Text>{icon}</InputGroup.Text>
-          <Form.Control
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            defaultValue={defaultValue}
-            onBlur={handleBlur}
-          />
-        </InputGroup>
-        {invalid && <div className="text-danger">{message}</div>}
-      </Form.Group>
-    );
-  };
-
-  const onInputChange = (name, value) => {
-    setInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value
-    }));
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
   const handleLogin = () => {
-    const userExists = users.find(
-      (user) => user.username === info.username && user.password === info.password
-    );
-  
+    const { username, password } = info;
+    const userExists = users.find((user) => user.username === username && user.password === password);
+
     if (userExists) {
       saveUserToLocalStorage(userExists);
       navigate('/Profile');
@@ -82,8 +34,6 @@ function Login() {
     }
   };
 
-  console.log(info);
-
   return (
     <>
       <div className="text-center">
@@ -91,28 +41,29 @@ function Login() {
         <hr />
       </div>
       <div className="container">
-      {formFields.map((field, index) => (
-        <FormInput
-          key={index}
-          label={field.label}
-          icon={field.icon}
-          type={field.type}
-          name={field.name}
-          placeholder={field.placeholder}
-          defaultValue={info[field.name]}
-          onInputChange={onInputChange}
-          invalid={field.name === 'password' && invalidLogin} 
-        />
-      ))}
+        {formFields.map((field, index) => (
+          <Form.Group controlId={`form${field.name}`} key={index}>
+            <Form.Label>{field.label}</Form.Label>
+            <InputGroup>
+              <InputGroup.Text>{field.icon}</InputGroup.Text>
+              <Form.Control
+                type={field.name === 'password' ? 'password' : 'text'}
+                name={field.name}
+                placeholder={field.placeholder}
+                value={info[field.name]}
+                onChange={handleInputChange}
+              />
+            </InputGroup>
+            {field.name === 'password' && invalidLogin && <div className="text-danger">{message}</div>}
+          </Form.Group>
+        ))}
 
         <div className="my-2">
           <Button onClick={handleLogin}>Log In</Button>
         </div>
         <div>
           <div className="mb-2">Don't have an account yet?</div>
-          <Link to="/Registration">
-                make a new account
-          </Link>
+          <Link to="/Registration">make a new account</Link>
         </div>
       </div>
     </>
