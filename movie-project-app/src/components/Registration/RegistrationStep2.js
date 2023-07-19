@@ -12,7 +12,6 @@ function RegistrationStep2() {
     });
 
     const [selectedGenres, setSelectedGenres] = useState([]);
-    
     const [genreList, setGenreList] = useState([]);
 
     const handleLanguageChange = (event) => {
@@ -24,8 +23,8 @@ function RegistrationStep2() {
 
     const handleGenreSelection = (genre) => {
         setSelectedGenres((prevSelectedGenres) => {
-            if(prevSelectedGenres.includes(genre)) {
-                return prevSelectedGenres.filter((g) => g !== genre);
+            if(prevSelectedGenres.find(g => g.id === genre.id)) {
+                return prevSelectedGenres.filter((g) => g.id !== genre.id);
             } else {
                 return [...prevSelectedGenres, genre];
             }
@@ -33,13 +32,17 @@ function RegistrationStep2() {
     }
 
     useEffect(() => {
-        getGenres().then((genres) => {
-          setGenreList(genres.map((genre) => genre.name));
-        });
+        getGenres().then(setGenreList);
 
         const userData = getUserFromLocalStorage();
         if (userData) {
-            setRegistrationData(userData);
+            setRegistrationData(prevState => ({
+                ...prevState,
+                username: userData.username || '',
+                password: userData.password || '',
+                language: userData.language || '',
+                genres: userData.genres || []
+            }));
         }
     }, []);
 
@@ -49,16 +52,17 @@ function RegistrationStep2() {
         event.preventDefault();
         const updatedRegistrationData = {
             ...registrationData,
-            genres: selectedGenres,
+            genres: selectedGenres.map(g => g.id),
         };
         saveUserToLocalStorage(updatedRegistrationData);
         navigate('/RegistrationStep3');
-    }
+    };
 
     const handleSkip = (event) => {
         event.preventDefault();
+        saveUserToLocalStorage(registrationData);
         navigate('/RegistrationStep3');
-    }
+    };
 
     return (
         <div className="container">
@@ -86,24 +90,23 @@ function RegistrationStep2() {
                         {genreList.map((genre, index) => (
                             <button 
                                 type="button" 
-                                className={selectedGenres.includes(genre) ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
+                                className={selectedGenres.find(g => g.id === genre.id) ? "btn btn-primary m-2" : "btn btn-secondary m-2"}
                                 key={index} 
                                 onClick={() => handleGenreSelection(genre)}
                             >
-                                {genre}
+                                {genre.name}
                             </button>
                         ))}
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="submit" className="btn btn-primary" 
-                    onClick={handleSkip}
-                    >Skip</button>
+                <div className="d-flex justify-content-around" style={{ width: "200px" }}>
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <button type="button" className="btn btn-primary" 
+                                onClick={handleSkip}
+                                >Skip</button>
+                </div>
             </form>
           </main>
-          <footer className="footer text-center my-5">
-            <p>&copy; 2023 Movie App</p>
-          </footer>
         </div>
       );
     };

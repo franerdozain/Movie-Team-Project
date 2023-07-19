@@ -91,8 +91,9 @@ function Login() {
         <hr />
       </div>
       <div className="container">
-        {formFields.map((field) => (
-          <FormInput
+      {formFields.map((field, index) => (
+        <FormInput
+          key={index}
           label={field.label}
           icon={field.icon}
           type={field.type}
@@ -102,7 +103,7 @@ function Login() {
           onInputChange={onInputChange}
           invalid={field.name === 'password' && invalidLogin} 
         />
-        ))}
+      ))}
 
         <div className="my-2">
           <Button onClick={handleLogin}>Log In</Button>
