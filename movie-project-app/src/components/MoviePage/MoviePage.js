@@ -47,7 +47,8 @@ function MoviePage() {
         window.responsiveVoice.cancel();
         setIsPlaying(false);
     } else {
-        const voiceStyle = getUserFromLocalStorage().voiceStyle || 'US English Female';
+        let user = getUserFromLocalStorage();
+        const voiceStyle = user && user.voiceStyle ? user.voiceStyle : 'US English Female';
         window.responsiveVoice.speak(text, voiceStyle, { onstart: () => setIsPlaying(true), onend: () => setIsPlaying(false) });
     }
 };
@@ -65,10 +66,6 @@ function MoviePage() {
                         />
                         <div className="card-body">
                             <h5 className="card-title">{movie.title}</h5>
-                            <div>
-                                <IoPlay onClick={() => handleVoiceover(movie.overview)} />
-                                <IoVolumeHigh />
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,10 +92,6 @@ function MoviePage() {
                                 <div>
                                     <p className="card-text">{reviews[0]?.content}</p>
                                     <button className="btn btn-primary">Show All</button>
-                                    <div>
-                                        <IoPlay onClick={() => handleVoiceover(movie.overview)} />
-                                        <IoVolumeHigh />
-                                    </div>
                                 </div>
                             ) : (
                                 <p>No reviews yet</p>

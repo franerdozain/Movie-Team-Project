@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { saveUserToLocalStorage } from '../../localStorageManager';
+import { getUsersFromLocalStorage, saveUserToUsersArray } from '../../localStorageManager';
 import { useNavigate } from 'react-router-dom';
 
 function Registration() {
@@ -26,12 +26,33 @@ function Registration() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (registrationData.password === confirmPassword) {
-            saveUserToLocalStorage(registrationData);
-            navigate('/RegistrationStep2');
-        } else {
-            alert('Error: Passwords do not match.');
+
+        const usernameRegex = /^[a-zA-Z0-9]{3,10}$/;
+        const passwordRegex = /^[a-zA-Z0-9_\-!\*]{5,10}$/;
+
+        if (!usernameRegex.test(registrationData.username)) {
+            alert('Name should have 3-10 characters and alphanumerics only.');
+            return;
         }
+
+        if (!passwordRegex.test(registrationData.password)) {
+            alert('Password should have 5-10 characters and can contain only alphanumerics (or _, -, !, * sign).');
+            return;
+        }
+
+        if (registrationData.password !== confirmPassword) {
+            alert('Error: Passwords do not match.');
+            return;
+        }
+
+        const users = getUsersFromLocalStorage();
+        if (users.find(user => user.username === registrationData.username)) {
+            alert('Error: Username already exists.');
+            return;
+        }
+
+        saveUserToUsersArray(registrationData);
+        navigate('/RegistrationStep2');
     };
 
   return (
@@ -95,9 +116,6 @@ function Registration() {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         </main>
-        <footer className="footer text-center my-5">
-            <p>&copy; Hulix Movie App</p>
-        </footer>
     </div>
   );
 }

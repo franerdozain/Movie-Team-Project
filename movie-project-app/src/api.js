@@ -1,6 +1,3 @@
-
-
-
 const API_KEY = 'api_key=d62b9f08c7e24702fe7b7bedf129c3e4';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -33,7 +30,7 @@ export const fetchFavoriteGenreMovies = async (favoriteGenre, language) => {
 
 export async function getMovieDetails(id) {
     const response = await fetch(
-        `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
+        `${BASE_URL}/movie/${id}?${API_KEY}&language=en-US`
     );
     if (!response.ok) {
         throw new Error("Failed to fetch movie details");
@@ -45,7 +42,7 @@ export async function getMovieDetails(id) {
 
 export async function getMovieImages(id) {
     const response = await fetch(
-        `${BASE_URL}/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en`
+        `${BASE_URL}/movie/${id}/images?${API_KEY}&language=en-US&include_image_language=en`
     );
     if (!response.ok) {
         throw new Error("Failed to fetch movie images");
@@ -58,7 +55,7 @@ export async function getMovieImages(id) {
 
 export async function getGenres () {
     const response = await fetch(
-        `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`)
+        `${BASE_URL}/genre/movie/list?${API_KEY}`)
         if (!response.ok) {
             throw new Error("Failed to fetch movie genres");
         }
@@ -68,7 +65,7 @@ export async function getGenres () {
 
 export async function getSelectedGenre(genreId) {
     const response = await fetch(
-        `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`)
+        `${BASE_URL}/discover/movie?${API_KEY}&with_genres=${genreId}`)
         if (!response.ok) {
             throw new Error("Failed to fetch selected genre movies");
         }
@@ -77,7 +74,7 @@ export async function getSelectedGenre(genreId) {
 }
 
 export async function getSortByWithGenre(genreId, sortBy) {
-  let apiUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&vote_count.gte=1000`;
+  let apiUrl = `${BASE_URL}/discover/movie?${API_KEY}&vote_count.gte=1000`;
 
   if (genreId !== null) {
     apiUrl += `&with_genres=${genreId}`;
@@ -99,7 +96,7 @@ export async function getSortByWithGenre(genreId, sortBy) {
 
 export async function getMovieCredits(id) {
     const response = await fetch(
-      `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`
+      `${BASE_URL}/movie/${id}/credits?${API_KEY}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch movie credits");
@@ -111,7 +108,7 @@ export async function getMovieCredits(id) {
 
 export async function getMovieReviews(id) {
     const response = await fetch(
-      `${BASE_URL}/movie/${id}/reviews?api_key=${API_KEY}`
+      `${BASE_URL}/movie/${id}/reviews?${API_KEY}`
     );
   
     if (!response.ok) {
@@ -137,7 +134,7 @@ export async function getMovieReviews(id) {
   
 export async function getSearchedMovies(movie) {
   const response = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${movie}`)
+      `${BASE_URL}/search/movie?${API_KEY}&query=${movie}`)
       if (!response.ok) {
           throw new Error("Failed to fetch searched movies");
       }
