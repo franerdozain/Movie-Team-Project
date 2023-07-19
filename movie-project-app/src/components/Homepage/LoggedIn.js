@@ -7,10 +7,10 @@ function LoggedIn(props) {
  
   return (
     <div>
-        <div>
-            Popular Movies 
+        <div className='text-center text-lg-start'>
+            MAIN GALLERY
         </div>
-        <div className="container col-md-12 ">
+        <div className="container">
           <div className='row'>
             {props.movieItems.map((item) => (
               <CardComponent
@@ -23,11 +23,11 @@ function LoggedIn(props) {
             ))}
           </div>  
         </div>
-        <div>
+        <div className='text-center text-lg-start'>
             MOVIES WE THINK YOU WILL LIKE
         </div>
-        <div className="container col-md-12 border">
-          <div className='row border'>
+        <div className="container text-center">
+          <div className='row ml-100'>
             {props.favoriteGenreItems.map((item) => (
               <CardComponent
                 id={item.id}

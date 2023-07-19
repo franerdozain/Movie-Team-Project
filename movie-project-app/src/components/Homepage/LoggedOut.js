@@ -7,7 +7,7 @@ function LoggedOut(props) {
  
   return (
     <div>
-        <div>
+        <div className='text-center text-lg-start'>
             COMING SOON
         </div>
         <div className="container col-md-12 border">
