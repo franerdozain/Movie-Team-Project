@@ -24,8 +24,9 @@ export default function Profile() {
         prevSelectedMovies.filter((movieIndex) => movieIndex !== index)
       );
     }
-    
+
   };
+  
 
   const deleteSelectedMovies = () => {
     setUserData((prevUserData) => {
