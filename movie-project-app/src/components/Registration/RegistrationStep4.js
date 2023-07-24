@@ -23,8 +23,9 @@ function RegistrationStep4() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const updatedRegistrationData = {
-            ...registrationData,
+            ...registrationData,            
             voiceStyle: selectedVoice,
+            history:[]
         };
         setRegistrationData(updatedRegistrationData);
         saveUserToUsersArray(updatedRegistrationData);
