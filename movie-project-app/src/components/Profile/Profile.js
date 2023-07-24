@@ -5,10 +5,8 @@ import { useEffect, useState } from 'react';
 
 export default function Profile() {
   const userDataInLocalStorage = getUserFromLocalStorage();
-  const [userData, setUserData] = useState(userDataInLocalStorage[0]);
+  const [userData, setUserData] = useState(userDataInLocalStorage);
   const [selectedMoviesToDelete, setSelectedMoviesToDelete] = useState([]);
-
- 
 
   const handleSaveClick = () => {
     clearUserFromLocalStorage()
@@ -56,8 +54,8 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    setUserData(userDataInLocalStorage[0]);
-  }, [userDataInLocalStorage]);
+    setUserData(userDataInLocalStorage);
+  }, []);
 
   return (
     <div className="container d-flex justify-content-around">
@@ -89,7 +87,7 @@ export default function Profile() {
 
       <div className="col-md-6 d-flex flex-column justify-content-between border rounded">
         <div className="list-group">
-          {userDataInLocalStorage[0].history.map((movie, index) => (
+          {userDataInLocalStorage.history.map((movie, index) => (
             <div className="list-group-item border-0" key={index}>
               <input 
               type="checkbox" 

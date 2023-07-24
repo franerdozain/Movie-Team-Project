@@ -44,7 +44,7 @@ export const getUsersFromLocalStorage = () => {
 export const clearUserFromLocalStorage = () => {
   try {
     localStorage.removeItem(KEY_USER);
-    window.location.reload();
+    // window.location.reload();
   } catch (error) {
     console.error('Error clearing user from local storage:', error);
   }
